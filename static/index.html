@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Test Board</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dot-grid"></div>
+    
+    <div class="board">
+        <!-- Status Card -->
+        <div class="card status-card" style="top: 100px; left: 100px;">
+            <div class="card-header">
+                <span class="icon">⚡</span>
+                <span class="title">System Status</span>
+            </div>
+            <div class="card-content" id="status-content">
+                <div class="loader">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="card note-card" style="top: 150px; left: 450px;">
+            <div class="card-header">
+                <span class="icon">📝</span>
+                <span class="title">Welcome</span>
+            </div>
+            <div class="card-content">
+                <p>To jest prosta tablica inspirowana stylem Milanote.</p>
+                <br>
+                <p>Wdrożone na: <strong>Railway</strong></p>
+            </div>
+        </div>
+
+         <!-- Image Card Placeholder -->
+         <div class="card image-card" style="top: 400px; left: 150px;">
+            <div class="card-header">
+                <span class="icon">🖼️</span>
+                <span class="title">Architecture</span>
+            </div>
+            <div class="card-content">
+                <div class="placeholder-image">
+                    FastAPI + Static
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                
+                const content = document.getElementById('status-content');
+                content.innerHTML = `
+                    <div class="status-item">
+                        <span class="label">Platforma</span>
+                        <span class="value badge">${data.platform}</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">Status</span>
+                        <span class="value valid">${data.status}</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">Env Var</span>
+                        <span class="value code">${data.env_var_test}</span>
+                    </div>
+                    <p class="message">"${data.message}"</p>
+                `;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('status-content').innerHTML = `<span class="error">Błąd połączenia z API</span>`;
+            }
+        }
+
+        fetchStatus();
+
+        // Simple drag simulation logic (visual only for effect, or basic implementation)
+        const cards = document.querySelectorAll('.card');
+        let activeCard = null;
+        let initialX, initialY, initialLeft, initialTop;
+
+        cards.forEach(card => {
+            card.addEventListener('mousedown', (e) => {
+                activeCard = card;
+                initialX = e.clientX;
+                initialY = e.clientY;
+                // Parse current left/top integers
+                const style = window.getComputedStyle(card);
+                initialLeft = parseInt(style.left);
+                initialTop = parseInt(style.top);
+                
+                card.style.zIndex = 1000; // Bring to front
+            });
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (activeCard) {
+                const dx = e.clientX - initialX;
+                const dy = e.clientY - initialY;
+                activeCard.style.left = `${initialLeft + dx}px`;
+                activeCard.style.top = `${initialTop + dy}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if(activeCard) {
+                activeCard.style.zIndex = '';
+                activeCard = null;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -4,7 +4,8 @@ To jest prosta aplikacja w Pythonie (FastAPI) przygotowana do przetestowania hos
 
 ## Struktura
 
-- `main.py`: Kod aplikacji.
+- `main.py`: Kod aplikacji (FastAPI).
+- `static/`: Pliki interfejsu (HTML/CSS).
 - `requirements.txt`: Lista zależności.
 - `Procfile`: Instrukcja startowa dla Railway.
 
@@ -22,8 +23,18 @@ To jest prosta aplikacja w Pythonie (FastAPI) przygotowana do przetestowania hos
 
 ## Wdrożenie na Railway
 
-1. Wrzuć ten kod na GitHub.
-2. W panelu Railway wybierz "New Project" -> "Deploy from GitHub repo".
-3. Wybierz to repozytorium.
-4. Railway automatycznie wykryje Pythona i plik `Procfile`.
-5. Po chwili aplikacja będzie dostępna pod wygenerowaną domeną.
+1. Miej kod w repozytorium GitHub.
+2. W panelu Railway stwórz projekt z repozytorium ("Deploy from GitHub repo").
+
+## Jak aktualizować?
+
+Skoro połączyłeś Railway z GitHubem, aktualizacja odbywa się przez wysłanie zmian do repozytorium:
+
+1. Zapisz zmiany.
+2. Wyślij je na GitHuba:
+   ```bash
+   git add .
+   git commit -m "Nowy interfejs UI"
+   git push
+   ```
+3. Railway automatycznie wykryje nowy commit i rozpocznie budowanie nowej wersji (Deploy).
